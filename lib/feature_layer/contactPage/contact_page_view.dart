@@ -38,7 +38,7 @@ class ContactView extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
+  // ignore: library_private_types_in_public_api  
   _ContactViewState createState() => _ContactViewState();
 }
 
@@ -50,7 +50,7 @@ class _ContactViewState extends State<ContactView> {
     final isNotEdited = !isEdited;
     final isNew = context.select((ContactCubit cubit) => cubit.state.isNew);
     final value =
-        context.select((ContactCubit cubit) => cubit.state.name.value);
+        context.select((ContactCubit cubit) => cubit.state.formContact.name.value);
     return Form(
       canPop: isNotEdited || isNew,
       onPopInvoked: (didPop) {
@@ -91,7 +91,7 @@ class SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isValid = context.watch<ContactCubit>().state.isValid;
+    final isValid = context.watch<ContactCubit>().state.formContact.isValid;
     return FloatingActionButton(
       onPressed: isValid
           ? () {
@@ -165,8 +165,8 @@ class _NameTextFieldState extends State<NameTextField> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = context.watch<ContactCubit>().state.name.value;
-    final erro = context.read<ContactCubit>().state.name.displayError;
+    _controller.text = context.watch<ContactCubit>().state.formContact.name.value;
+    final erro = context.read<ContactCubit>().state.formContact.name.displayError;
     return TextFormField(
       controller: _controller,
       decoration: InputDecoration(
@@ -204,8 +204,8 @@ class _EmailTextFieldState extends State<EmailTextField> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = context.watch<ContactCubit>().state.email.value;
-    final erro = context.read<ContactCubit>().state.email.displayError;
+    _controller.text = context.watch<ContactCubit>().state.formContact.email.value;
+    final erro = context.read<ContactCubit>().state.formContact.email.displayError;
 
     return TextFormField(
       controller: _controller,
@@ -245,8 +245,8 @@ class _PhoneTextFieldState extends State<PhoneTextField> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = context.watch<ContactCubit>().state.phone.value;
-    final erro = context.read<ContactCubit>().state.phone.displayError;
+    _controller.text = context.watch<ContactCubit>().state.formContact.phone.value;
+    final erro = context.read<ContactCubit>().state.formContact.phone.displayError;
 
     return TextField(
       controller: _controller,

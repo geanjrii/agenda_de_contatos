@@ -9,6 +9,12 @@ import 'package:test/test.dart';
 class MockContactsRepository extends Mock implements ContactsRepository {}
 
 void main() {
+  const mockFormContact = FormContact(
+    name: Name.dirty('John Doe'),
+    email: Email.dirty('john@example.com'),
+    phone: Phone.dirty('(83) 98888-8888'),
+  );
+
   const mockContact = Contact(
     name: 'John Doe',
     email: 'john@example.com',
@@ -21,7 +27,7 @@ void main() {
     name: 'John Doe',
     email: 'john@example.com',
     phone: '(83) 98888-8888',
-    img: '', 
+    img: '',
   );
   group('ContactCubit', () {
     late ContactCubit contactCubit;
@@ -46,13 +52,10 @@ void main() {
       act: (cubit) => cubit.init(mockContact),
       expect: () => [
         const ContactState(
-          name: Name.dirty('John Doe'),
-          email: Email.dirty('john@example.com'),
-          phone: Phone.dirty('(83) 98888-8888'),
+          formContact: mockFormContact,
           img: '',
           id: 1,
           isEdited: false,
-          isValid: true,
           isNew: false,
         ),
       ],
@@ -60,14 +63,12 @@ void main() {
 
     blocTest<ContactCubit, ContactState>(
       'emits correct state when onNameChanged is called',
+      seed: () => const ContactState(formContact: mockFormContact),
       build: () => contactCubit,
       act: (cubit) => cubit.onNameChanged('John Doe'),
       expect: () => [
         const ContactState(
-          name: Name.dirty('John Doe'),
-          email: Email.pure(),
-          phone: Phone.pure(),
-          isValid: false,
+          formContact: mockFormContact,
           isEdited: true,
         ),
       ],
@@ -75,14 +76,12 @@ void main() {
 
     blocTest<ContactCubit, ContactState>(
       'emits correct state when onEmailChanged is called',
+      seed: () => const ContactState(formContact: mockFormContact),
       build: () => contactCubit,
       act: (cubit) => cubit.onEmailChanged('john@example.com'),
       expect: () => [
         const ContactState(
-          name: Name.pure(),
-          email: Email.dirty('john@example.com'),
-          phone: Phone.pure(),
-          isValid: false,
+          formContact: mockFormContact,
           isEdited: true,
         ),
       ],
@@ -90,14 +89,12 @@ void main() {
 
     blocTest<ContactCubit, ContactState>(
       'emits correct state when onPhoneChanged is called',
+      seed: () => const ContactState(formContact: mockFormContact),
       build: () => contactCubit,
-      act: (cubit) => cubit.onPhoneChanged('123456789'),
+      act: (cubit) => cubit.onPhoneChanged('(83) 98888-8888'),
       expect: () => [
         const ContactState(
-          name: Name.pure(),
-          email: Email.pure(),
-          phone: Phone.dirty('123456789'),
-          isValid: false,
+          formContact: mockFormContact,
           isEdited: true,
         ),
       ],
@@ -105,15 +102,14 @@ void main() {
 
     blocTest<ContactCubit, ContactState>(
       'emits correct state when onImageChanged is called',
+      seed: () => const ContactState(formContact: mockFormContact),
+
       build: () => contactCubit,
       act: (cubit) => cubit.onImageChanged('image.jpg'),
       expect: () => [
         const ContactState(
-          name: Name.pure(),
-          email: Email.pure(),
-          phone: Phone.pure(),
+          formContact: mockFormContact,
           img: 'image.jpg',
-          isValid: false,
           isEdited: true,
         ),
       ],
@@ -140,11 +136,8 @@ void main() {
       },
       build: () => contactCubit,
       seed: () => const ContactState(
-        name: Name.dirty('John Doe'),
-        email: Email.dirty('john@example.com'),
-        phone: Phone.dirty('(83) 98888-8888'),
+        formContact: mockFormContact,
         img: '',
-        isValid: true,
         isEdited: true,
         isNew: true,
       ),
@@ -165,11 +158,8 @@ void main() {
       },
       build: () => contactCubit,
       seed: () => const ContactState(
-        name: Name.dirty('John Doe'),
-        email: Email.dirty('john@example.com'),
-        phone: Phone.dirty('(83) 98888-8888'),
+        formContact: mockFormContact,
         img: '',
-        isValid: true,
         isEdited: true,
         isNew: false,
         id: 1,
